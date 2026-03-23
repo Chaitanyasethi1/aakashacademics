@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Wallah Clone | Highest Quality Education</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --pw-orange: #ff6b00;
+            --pw-orange-hover: #e55a00;
+            --pw-navy: #1a1a2e;
+            --pw-navy-light: #2a2a4a;
+            --pw-bg-light: #f8f9fa;
+            --pw-gray: #757575;
+            --pw-border: #eaebed;
+            --pw-white: #ffffff;
+            --pw-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --pw-shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
+            --border-radius-lg: 16px;
+            --border-radius-md: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--pw-white); color: #333; overflow-x: hidden; line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        .section-padding { padding: 80px 0; }
+        
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 28px; border-radius: var(--border-radius-md); font-weight: 600; cursor: pointer; transition: all 0.3s ease; border: none; font-size: 1rem; }
+        .btn-primary { background-color: var(--pw-orange); color: var(--pw-white); box-shadow: 0 4px 14px rgba(255,107,0,0.3); }
+        .btn-primary:hover { background-color: var(--pw-orange-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,0,0.4); }
+        .btn-outline { background-color: transparent; border: 2px solid var(--pw-orange); color: var(--pw-orange); padding: 10px 28px; }
+        .btn-outline:hover { background-color: var(--pw-orange); color: var(--pw-white); }
+        .btn-white { background-color: var(--pw-white); color: var(--pw-navy); box-shadow: var(--pw-shadow); }
+        .btn-white:hover { color: var(--pw-orange); transform: translateY(-2px); }
+
+        /* -------------- HEADER / NAVBAR -------------- */
+        header { position: sticky; top: 0; background: var(--pw-white); box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000; transition: all 0.3s; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; height: 80px; }
+        .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.6rem; color: var(--pw-navy); letter-spacing: -0.5px; }
+        .logo-icon { color: var(--pw-orange); font-size: 2.2rem; }
+        
+        .nav-links { display: flex; gap: 28px; align-items: center; }
+        .nav-item { position: relative; font-weight: 500; font-size: 1rem; cursor: pointer; padding: 28px 0; color: #4a4a4a; transition: color 0.2s; }
+        .nav-item:hover { color: var(--pw-orange); }
+        .nav-item i { font-size: 0.8rem; margin-left: 4px; transition: transform 0.3s; }
+        .nav-item:hover i { transform: rotate(180deg); }
+        
+        .dropdown-menu { position: absolute; top: 100%; left: -200px; background: var(--pw-white); box-shadow: 0 10px 40px rgba(0,0,0,0.1); width: 900px; padding: 30px; border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg); z-index: 100; border-top: 3px solid var(--pw-orange); opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+        .nav-item:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-col h4 { color: var(--pw-navy); margin-bottom: 16px; font-size: 1.05rem; border-bottom: 2px solid var(--pw-bg-light); padding-bottom: 8px; }
+        .dropdown-col li { padding: 8px 0; font-size: 0.95rem; color: var(--pw-gray); transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+        .dropdown-col li:hover { color: var(--pw-orange); transform: translateX(5px); }
+        .dropdown-col li::before { content: "•"; color: var(--pw-orange); font-size: 1.2rem; line-height: 1; }
+
+        .mobile-menu-btn { display: none; font-size: 1.8rem; cursor: pointer; color: var(--pw-navy); }
+
+        /* -------------- HERO CAROUSEL -------------- */
+        .hero { position: relative; width: 100%; height: 500px; overflow: hidden; background: var(--pw-navy); }
+        .carousel-track { display: flex; height: 100%; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+        .carousel-slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-size: cover; background-position: center; position: relative; }
+        .carousel-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(26,26,46,0.95) 0%, rgba(26,26,46,0.7) 40%, transparent 100%); }
+        .slide-content { position: relative; z-index: 2; width: 100%; max-width: 1280px; padding: 0 24px; }
+        .slide-content-inner { max-width: 600px; }
+        .slide-badge { display: inline-block; padding: 6px 16px; background: rgba(255,107,0,0.15); color: var(--pw-orange); border: 1px solid rgba(255,107,0,0.3); border-radius: 100px; font-weight: 600; font-size: 0.9rem; margin-bottom: 16px; }
+        .slide-content h2 { font-size: 3.5rem; margin-bottom: 16px; color: var(--pw-white); line-height: 1.1; font-weight: 800; }
+        .slide-content p { color: #e2e8f0; font-size: 1.15rem; margin-bottom: 32px; font-weight: 300; max-width: 500px; }
+        
+        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--pw-white); border: none; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; color: var(--pw-navy); box-shadow: var(--pw-shadow); transition: 0.3s; display: flex; align-items: center; justify-content: center; opacity: 0.7; }
+        .carousel-btn:hover { background: var(--pw-orange); color: white; opacity: 1; scale: 1.1; }
+        .prev-btn { left: 24px; }
+        .next-btn { right: 24px; }
+        .carousel-dots { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: 0.3s; }
+        .dot.active { background: var(--pw-orange); width: 30px; border-radius: 100px; }
+
+        /* -------------- TAGLINE / GET STARTED -------------- */
+        .tagline-section { background: linear-gradient(135deg, #1a1a2e 0%, #0f0f20 100%); color: var(--pw-white); text-align: center; position: relative; overflow: hidden; }
+        .tagline-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--pw-orange), #ff9900); }
+        .tagline-section h1 { font-size: 3.2rem; margin-bottom: 24px; font-weight: 800; line-height: 1.2; letter-spacing: -1px; }
+        .tagline-section h1 span { color: var(--pw-orange); }
+        .tagline-section p { font-size: 1.2rem; color: #a0aec0; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; font-weight: 400; }
+        .stats-row { display: flex; justify-content: center; gap: 60px; margin-top: 60px; flex-wrap: wrap; background: rgba(255,255,255,0.03); padding: 40px; border-radius: var(--border-radius-lg); border: 1px solid rgba(255,255,255,0.05); }
+        .stat-item { display: flex; flex-direction: column; align-items: center; gap: 16px; max-width: 200px; }
+        .icon-wrapper { width: 70px; height: 70px; border-radius: 50%; background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.2); display: flex; align-items: center; justify-content: center; }
+        .stat-item i { font-size: 2rem; color: var(--pw-orange); }
+        .stat-item span { font-size: 1.05rem; font-weight: 500; color: #e2e8f0; }
+
+        /* -------------- RESULTS SECTION -------------- */
+        .section-header { text-align: center; margin-bottom: 48px; }
+        .section-title { font-size: 2.5rem; color: var(--pw-navy); margin-bottom: 12px; font-weight: 800; letter-spacing: -0.5px; }
+        .section-subtitle { color: var(--pw-gray); font-size: 1.1rem; }
+        
+        .tabs-container { display: flex; justify-content: center; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 40px; scrollbar-width: none; }
+        .tabs-container::-webkit-scrollbar { display: none; }
+        .tab-btn { padding: 12px 28px; background: var(--pw-white); border: 1px solid var(--pw-border); border-radius: 100px; cursor: pointer; font-weight: 600; color: var(--pw-gray); white-space: nowrap; transition: all 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .tab-btn:hover { border-color: var(--pw-orange); color: var(--pw-orange); }
+        .tab-btn.active { background: var(--pw-orange); color: var(--pw-white); border-color: var(--pw-orange); box-shadow: 0 4px 10px rgba(255,107,0,0.2); }
+
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; position: relative; }
+        .result-card { background: var(--pw-white); border-radius: var(--border-radius-lg); overflow: hidden; box-shadow: var(--pw-shadow); border: 1px solid var(--pw-border); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; }
+        .result-card:hover { transform: translateY(-8px); box-shadow: var(--pw-shadow-hover); border-color: rgba(255,107,0,0.3); }
+        .result-img-wrapper { position: relative; width: 100%; height: 260px; background-color: #fcece0; overflow: hidden; }
+        .result-student-photo { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+        .result-badge { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(135deg, var(--pw-orange) 0%, #ff8c00 100%); padding: 8px 0; color: white; text-align: center; font-weight: 700; font-size: 1.1rem; }
+        .result-info { padding: 24px; text-align: center; }
+        .result-name { font-size: 1.25rem; font-weight: 700; color: var(--pw-navy); margin-bottom: 4px; }
+        .result-exam { color: var(--pw-gray); font-size: 0.95rem; font-weight: 500; }
+
+        /* -------------- TESTIMONIALS -------------- */
+        .testimonials { background: var(--pw-bg-light); border-top: 1px solid var(--pw-border); border-bottom: 1px solid var(--pw-border); }
+        .testimonials-slider { display: flex; gap: 24px; overflow-x: auto; padding: 20px 0 40px; scrollbar-width: none; scroll-snap-type: x mandatory; }
+        .testimonials-slider::-webkit-scrollbar { display: none; }
+        .testimonial-card { min-width: 400px; scroll-snap-align: start; background: var(--pw-white); padding: 32px; border-radius: var(--border-radius-lg); box-shadow: var(--pw-shadow); position: relative; border: 1px solid var(--pw-border); display: flex; flexDirection: column; justify-content: space-between; }
+        .quote-icon { position: absolute; top: 24px; right: 28px; color: rgba(255,107,0,0.1); font-size: 4rem; z-index: 0; line-height: 1; }
+        .student-info { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; position: relative; z-index: 1; }
+        .student-img { width: 68px; height: 68px; border-radius: 50%; object-fit: cover; border: 2px solid var(--pw-white); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .student-detail h4 { color: var(--pw-navy); font-size: 1.1rem; font-weight: 700; margin-bottom: 2px; }
+        .student-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 107, 0, 0.1); color: var(--pw-orange); padding: 4px 12px; border-radius: 100px; font-size: 0.85rem; font-weight: 600; }
+        .quote-text { color: #555; font-size: 1.05rem; line-height: 1.7; position: relative; z-index: 1; font-style: italic; }
+
+        /* -------------- APP DOWNLOAD REDESIGN -------------- */
+        .app-section-wrapper { background: linear-gradient(135deg, white, #f8f9fa); border-radius: var(--border-radius-lg); padding: 60px; box-shadow: var(--pw-shadow); border: 1px solid var(--pw-border); overflow: hidden; position: relative; }
+        .app-section { display: flex; align-items: center; justify-content: space-between; gap: 60px; flex-wrap: wrap; }
+        .app-content { flex: 1; min-width: 320px; z-index: 2; position: relative; }
+        .app-badge { display: inline-block; padding: 6px 16px; background: rgba(37,99,235,0.1); color: #2563eb; border-radius: 100px; font-weight: 700; margin-bottom: 20px; font-size: 0.9rem; }
+        .app-content h2 { font-size: 3.2rem; color: var(--pw-navy); margin-bottom: 24px; font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
+        .app-content h2 span { color: var(--pw-orange); }
+        .app-features { margin-bottom: 40px; }
+        .app-features li { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; font-size: 1.15rem; color: #4a5568; font-weight: 500; }
+        .app-features i { color: #10b981; font-size: 1.4rem; margin-top: 4px; }
+        .store-btns { display: flex; gap: 20px; }
+        .store-btn { background: var(--pw-navy); color: white; padding: 12px 24px; border-radius: 12px; display: flex; align-items: center; gap: 12px; transition: 0.3s; width: 180px; }
+        .store-btn:hover { background: var(--pw-orange); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        .store-btn i { font-size: 2rem; }
+        .store-text-small { font-size: 0.75rem; font-weight: 500; opacity: 0.8; line-height: 1; margin-bottom: 4px; }
+        .store-text-large { font-size: 1.15rem; font-weight: 700; line-height: 1; }
+        
+        .app-img-wrapper { flex: 1; min-width: 300px; display: flex; justify-content: center; position: relative; z-index: 2; }
+        .phone-mockup { width: 320px; height: 650px; background: white; border-radius: 48px; border: 14px solid #1a202c; box-shadow: 0 30px 60px rgba(0,0,0,0.2); position: relative; overflow: hidden; }
+        .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 30px; background: #1a202c; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; z-index: 10; }
+        .phone-screen { width: 100%; height: 100%; background: linear-gradient(135deg, #1a1a2e 0%, #2a2a4a 100%); display: flex; flex-direction: column; }
+        .phone-header { padding: 40px 20px 20px; display: flex; justify-content: space-between; color: white; }
+        .phone-card { background: white; margin: 15px; border-radius: 16px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .phone-card-header { font-size: 1.2rem; font-weight: 700; color: var(--pw-navy); }
+        .phone-course-box { background: #f8f9fa; border: 1px solid var(--pw-border); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; }
+        .phone-course-box .icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(255,107,0,0.1); color: var(--pw-orange); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        
+        /* -------------- FOOTER -------------- */
+        footer { background: var(--pw-navy); color: #cbd5e1; padding: 80px 0 20px; font-size: 0.95rem; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+        .footer-col h4 { color: white; font-size: 1.15rem; margin-bottom: 24px; font-weight: 700; }
+        .footer-col ul li { margin-bottom: 14px; transition: 0.2s; cursor: pointer; }
+        .footer-col ul li:hover { color: var(--pw-orange); }
+        .social-icons { display: flex; gap: 12px; margin-top: 24px; }
+        .social-icons a { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; transition: all 0.3s; font-size: 1.2rem; }
+        .social-icons a:hover { background: var(--pw-orange); color: white; transform: translateY(-3px); }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+
+        @media (max-width: 1100px) {
+            .footer-grid { grid-template-columns: repeat(3, 1fr); }
+            .nav-links { gap: 15px; }
+        }
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .section-padding { padding: 50px 0; }
+            .tagline-section h1 { font-size: 2.4rem; }
+            .app-section { flex-direction: column; text-align: center; }
+            .app-features li { justify-content: center; }
+            .store-btns { justify-content: center; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .footer-bottom { justify-content: center; }
+        }
+        @media (max-width: 600px) {
+            .footer-grid { grid-template-columns: 1fr; }
+            .phone-mockup { width: 100%; max-width: 320px; }
+            .slide-content h2 { font-size: 2.2rem; }
+            .stats-row { gap: 30px; }
+            .testimonial-card { min-width: 300px; padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header>
+        <div class="container navbar">
+            <div class="logo">
+                <i class="fa-solid fa-graduation-cap logo-icon"></i>
+                Physics Wallah
+            </div>
+            <div class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item">
+                    All Courses <i class="fa-solid fa-chevron-down"></i>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-col">
+                            <h4>Competitive Exams</h4>
+                            <ul>
+                                <li>IIT JEE</li><li>NEET</li><li>ESE</li><li>GATE</li><li>AE/JE</li><li>Olympiad</li>
+                            </ul>
+                        </div>
+                        <div class="dropdown-col">
+                            <h4>School Preparation</h4>
+                            <ul>
+                                <li>Foundation (6-10)</li><li>CuriousJr (3rd-8th)</li><li>CBSE Boards</li><li>ICSE</li><li>UP Board</li><li>Bihar Board</li>
+                            </ul>
+                        </div>
+                        <div class="dropdown-col">
+                            <h4>Govt & UG Exam</h4>
+                            <ul>
+                                <li>UPSC CSE</li><li>State PSC</li><li>SSC</li><li>Banking</li><li>CUET / LAW</li><li>MBA / IPMAT</li>
+                            </ul>
+                        </div>
+                        <div class="dropdown-col">
+                            <h4>Finance</h4>
+                            <ul>
+                                <li>CA Foundation</li><li>CS Executive</li><li>ACCA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">Vidyapeeth</li>
+                <li class="nav-item">Upskilling</li>
+                <li class="nav-item">PW Store</li>
+                <li class="nav-item">Real Test</li>
+                <li class="nav-item">Class 1st-8th</li>
+                <li class="nav-item">Power Batch</li>
+            </ul>
+            <div class="nav-links">
+                <button class="btn btn-outline"><i class="fa-regular fa-user"></i> Login / Register</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Carousel -->
+    <section class="hero">
+        <button class="carousel-btn prev-btn" onclick="moveSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="carousel-btn next-btn" onclick="moveSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        
+        <div class="carousel-track" id="carousel-track">
+            <!-- Intersected dynamically below via JS to save raw HTML length, keeping high fidelity -->
+        </div>
+        <div class="carousel-dots" id="carousel-dots">
+            <!-- Dots -->
+        </div>
+    </section>
+
+    <!-- Tagline Section -->
+    <section class="tagline-section section-padding">
+        <div class="container">
+            <h1>Bharat's Trusted & Affordable<br><span>Educational Platform</span></h1>
+            <p>Unlock your potential by signing up with Physics Wallah - The most affordable learning solution built for every student in India.</p>
+            <button class="btn btn-primary" style="padding: 16px 40px; font-size: 1.15rem; border-radius: 100px;">Get Started For Free <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
+            
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="icon-wrapper"><i class="fa-solid fa-video"></i></div>
+                    <span>Daily Live<br>Interactive Classes</span>
+                </div>
+                <div class="stat-item">
+                    <div class="icon-wrapper"><i class="fa-solid fa-file-contract"></i></div>
+                    <span>10 Million+ Tests,<br>papers & notes</span>
+                </div>
+                <div class="stat-item">
+                    <div class="icon-wrapper"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <span>24x7 Doubt<br>solving sessions</span>
+                </div>
+                <div class="stat-item">
+                    <div class="icon-wrapper"><i class="fa-solid fa-building"></i></div>
+                    <span>100+ Offline<br>Vidyapeeth Centres</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="section-padding" style="background-color: #f8fafc;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Academic Excellence : Results</h2>
+                <p class="section-subtitle">Giving wings to a million dreams, a million more to go</p>
+            </div>
+            
+            <div class="tabs-container" id="result-tabs">
+                <!-- Injected via JS -->
+            </div>
+            
+            <div class="results-grid" id="results-grid">
+                <!-- Cards injected via JS -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn btn-outline">View All Results</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials section-padding">
+        <div class="container">
+            <div class="section-header" style="text-align: left; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <h2 class="section-title" style="margin-bottom: 8px;">Students ❤️ Physics Wallah</h2>
+                    <p class="section-subtitle">Hear genuine stories directly from our successful ranks</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-white" style="padding: 10px; border-radius: 50%; width: 45px; height: 45px;"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button class="btn btn-white" style="padding: 10px; border-radius: 50%; width: 45px; height: 45px;"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="testimonials-slider" id="testimonials-slider">
+                <!-- Testimonials injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- App Section -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="app-section-wrapper">
+                <div class="app-section">
+                    <div class="app-content">
+                        <div class="app-badge">📲 Download The App</div>
+                        <h2>Join <span>15 Million</span> students on the app today!</h2>
+                        <ul class="app-features">
+                            <li><i class="fa-solid fa-circle-check"></i> <div><strong>Live & recorded classes</strong> available at ease anytime.</div></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <div><strong>Smart Dashboard</strong> for detailed progress tracking.</div></li>
+                            <li><i class="fa-solid fa-circle-check"></i> <div><strong>Lakhs of practice questions</strong> and mock tests.</div></li>
+                        </ul>
+                        <div class="store-btns">
+                            <a href="#" class="store-btn">
+                                <i class="fa-brands fa-google-play"></i>
+                                <div>
+                                    <div class="store-text-small">GET IT ON</div>
+                                    <div class="store-text-large">Google Play</div>
+                                </div>
+                            </a>
+                            <a href="#" class="store-btn">
+                                <i class="fa-brands fa-apple"></i>
+                                <div>
+                                    <div class="store-text-small">Download on the</div>
+                                    <div class="store-text-large">App Store</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="app-img-wrapper">
+                        <div class="phone-mockup">
+                            <div class="phone-notch"></div>
+                            <div class="phone-screen">
+                                <div class="phone-header">
+                                    <div style="font-weight: 700; font-size: 1.1rem;"><i class="fa-solid fa-graduation-cap"></i> pw.live</div>
+                                    <i class="fa-solid fa-bell"></i>
+                                </div>
+                                <div class="phone-card">
+                                    <div class="phone-card-header">Your Upcoming Classes</div>
+                                    <div class="phone-course-box">
+                                        <div class="icon"><i class="fa-solid fa-atom"></i></div>
+                                        <div>
+                                            <div style="font-weight: 700; font-size: 0.95rem; color: #1a1a2e;">Physics - Mechanics</div>
+                                            <div style="font-size: 0.8rem; color: #757575;">10:00 AM • Live</div>
+                                        </div>
+                                    </div>
+                                    <div class="phone-course-box">
+                                        <div class="icon" style="color: #10b981; background: rgba(16,185,129,0.1);"><i class="fa-solid fa-flask"></i></div>
+                                        <div>
+                                            <div style="font-weight: 700; font-size: 0.95rem; color: #1a1a2e;">Chemistry - Kinetics</div>
+                                            <div style="font-size: 0.8rem; color: #757575;">12:00 PM • Upcoming</div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: auto;">Explore Batches</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="section-padding" style="background-color: var(--pw-navy); color: white; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div class="container">
+            <h2 style="font-size: 2.8rem; font-weight: 800; margin-bottom: 20px;">Join The <span style="color: var(--pw-orange);">PW Family</span>, Today!</h2>
+            <p style="font-size: 1.15rem; color: #cbd5e1; max-width: 650px; margin: 0 auto 40px; font-weight: 300;">Explore our 130+ YouTube Channels and subscribe to get access to quality education for free. Over 40 Million+ total subscribers learning every day.</p>
+            <button class="btn btn-primary" style="padding: 16px 40px; font-size: 1.1rem; border-radius: 100px;">Explore YouTube Channels &nbsp; <i class="fa-brands fa-youtube"></i></button>
+            
+            <div style="margin-top: 60px;">
+                <div style="display: inline-flex; align-items: center; gap: 24px; background: rgba(255,255,255,0.05); padding: 24px 48px; border-radius: var(--border-radius-lg); border: 1px solid rgba(255,255,255,0.1); text-align: left;">
+                    <div style="width: 60px; height: 60px; background: rgba(255,107,0,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-headset" style="font-size: 1.8rem; color: var(--pw-orange);"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 1rem; color: #94a3b8; font-weight: 500;">Talk to our expert counsellor</div>
+                        <div style="font-size: 1.8rem; font-weight: 800; letter-spacing: 1px;">07290070560</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col" style="grid-column: span 2;">
+                    <div class="logo" style="color: white; margin-bottom: 24px; font-size: 1.8rem;">
+                        <i class="fa-solid fa-graduation-cap logo-icon"></i> Physics Wallah
+                    </div>
+                    <p style="color: #94a3b8; font-size: 1rem; margin-bottom: 30px; line-height: 1.8; max-width: 350px;">We understand that every student has different needs and capabilities, which is why we create such a wonderful and unique curriculum that is the best fit for every student.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li>About Us</li><li>Contact Us</li><li>Careers</li><li>Updates</li><li>Account Deletion</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Popular Exams</h4>
+                    <ul>
+                        <li>IIT JEE</li><li>NEET</li><li>GATE</li><li>Defence</li><li>UPSC</li><li>School Prep</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Learning Resources</h4>
+                    <ul>
+                        <li>PW Study Materials</li><li>PW Books</li><li>Notes (Class 6-9)</li><li>Notes (Class 10-12)</li><li>Govt Exams</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div>Copyright &copy; 2025 Physicswallah Limited. All rights reserved.</div>
+                <div style="display: flex; gap: 20px;">
+                    <a href="#" style="color: #94a3b8;">Privacy Policy</a>
+                    <a href="#" style="color: #94a3b8;">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Vanilla Javascript Logic -->
+    <script>
+        // --- 1. HERO CAROUSEL LOGIC ---
+        const bannerImages = [
+            'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80',
+            'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80',
+            'https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80',
+            'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'
+        ];
+        
+        const slidesData = [
+            { title: 'Learn with India\'s best teachers', badge: 'NEET 2025 Target Batch', img: bannerImages[0] },
+            { title: 'Secure your rank with the best', badge: 'JEE Advanced Power Batch', img: bannerImages[1] },
+            { title: 'Complete comprehensive study plan', badge: 'UPSC CSE Foundation', img: bannerImages[2] },
+            { title: 'Crack PSU with top AIR', badge: 'GATE 2024 Achievers', img: bannerImages[3] }
+        ];
+
+        const track = document.getElementById('carousel-track');
+        const dotsContainer = document.getElementById('carousel-dots');
+        let currentSlide = 0;
+
+        function initCarousel() {
+            slidesData.forEach((slide, index) => {
+                const slideEl = document.createElement('div');
+                slideEl.className = 'carousel-slide';
+                slideEl.style.backgroundImage = `url(${slide.img})`;
+                slideEl.innerHTML = `
+                    <div class="slide-content">
+                        <div class="slide-content-inner">
+                            <div class="slide-badge"><i class="fa-solid fa-fire"></i> ${slide.badge}</div>
+                            <h2>${slide.title}</h2>
+                            <p>Join India's most affordable and trusted education platform. Daily live classes, mentorship, and extensive mock tests.</p>
+                            <button class="btn btn-primary" style="padding: 14px 36px;">View Batch Details</button>
+                        </div>
+                    </div>
+                `;
+                track.appendChild(slideEl);
+
+                const dot = document.createElement('div');
+                dot.className = `dot ${index === 0 ? 'active' : ''}`;
+                dot.onclick = () => goToSlide(index);
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                dot.className = `dot ${index === currentSlide ? 'active' : ''}`;
+            });
+        }
+
+        function moveSlide(direction) {
+            currentSlide = (currentSlide + direction + slidesData.length) % slidesData.length;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        setInterval(() => moveSlide(1), 4000);
+        initCarousel();
+
+        // --- 2. RESULTS FILTER TAB LOGIC ---
+        const tabs = ['NEET 2024', 'JEE Advanced 2024', 'UPSC CSE 2023', 'GATE 2024', 'CA Foundation', 'CBSE 10th'];
+        const studentPhotos = [
+            'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            'https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            'https://images.unsplash.com/photo-1615109398623-88346a601842?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+            'https://images.unsplash.com/photo-1544717302-de2939b7ef71?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
+        ];
+
+        const resultsData = [
+            { name: 'Tathagat Awatar', rank: 'AIR 1', tag: 'NEET 2024', img: studentPhotos[0] },
+            { name: 'Sushant Padha', rank: 'AIR 52', tag: 'JEE Advanced 2024', img: studentPhotos[1] },
+            { name: 'Raja Majhi', rank: 'AIR 1', tag: 'GATE 2024', img: studentPhotos[2] },
+            { name: 'Anmol Rathore', rank: 'AIR 7', tag: 'UPSC CSE 2023', img: studentPhotos[3] },
+            { name: 'Neha Kumari', rank: 'AIR 14', tag: 'NEET 2024', img: studentPhotos[4] },
+            { name: 'Aryan Singh', rank: '99.9%', tag: 'CBSE 10th', img: studentPhotos[5] },
+            { name: 'Ravi Teja', rank: 'AIR 3', tag: 'CA Foundation', img: studentPhotos[6] },
+            { name: 'Pooja Verma', rank: 'AIR 88', tag: 'JEE Advanced 2024', img: studentPhotos[7] }
+        ];
+
+        const tabsContainer = document.getElementById('result-tabs');
+        const resultsGrid = document.getElementById('results-grid');
+
+        // Initial render
+        renderResults('All');
+
+        tabs.forEach((tab, index) => {
+            const btn = document.createElement('button');
+            btn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+            btn.textContent = tab;
+            btn.onclick = () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderResults(tab);
+            };
+            tabsContainer.appendChild(btn);
+        });
+
+        function renderResults(filterItem) {
+            resultsGrid.innerHTML = '';
+            // Just for simulation, if user clicks specific tab, we render a smaller array. If first click, let's just render the first raw ones that closely match. (Actually let's just shuffle or show specific ones)
+            let filtered = filterItem === 'All' ? resultsData : resultsData.filter(r => r.tag === filterItem);
+            if(filtered.length === 0) filtered = resultsData.slice(0, 4); // fallback visually
+            if(filterItem === 'NEET 2024' || filterItem === 'All') filtered = resultsData.slice(0, 4);
+
+            filtered.forEach(res => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-img-wrapper">
+                        <img src="${res.img}" class="result-student-photo" alt="${res.name}">
+                        <div class="result-badge"><i class="fa-solid fa-trophy" style="color:#ffd700; margin-right: 5px;"></i> ${res.rank}</div>
+                    </div>
+                    <div class="result-info">
+                        <div class="result-name">${res.name}</div>
+                        <div class="result-exam">${res.tag}</div>
+                    </div>
+                `;
+                resultsGrid.appendChild(card);
+            });
+        }
+
+        // --- 3. TESTIMONIALS LOGIC ---
+        const testimonialsContainer = document.getElementById('testimonials-slider');
+        const testData = [
+            { name: 'Aditya Kumar', text: 'Physics Wallah changed my entire approach to solving mock tests. The teachers broke down complex calculus concepts literally perfectly.', tag: 'IIT JEE', rank: 'AIR 432', img: studentPhotos[0] },
+            { name: 'Neha Singh', text: 'Their incredibly affordable batches allowed me to prepare for NEET without putting financial strain on my parents. Selected in my first attempt!', tag: 'NEET', rank: 'AIR 1500', img: studentPhotos[1] },
+            { name: 'Rahul Sharma', text: 'I never thought high-grade UPSC coaching could be this affordable and high quality. The daily current affairs analysis classes are truly the best available.', tag: 'UPSC CSE', rank: 'Clear Prelims', img: studentPhotos[2] },
+            { name: 'Priya Verma', text: 'The advanced doubt solving engine on the PW app is magical. I got my doubts solved at 2 AM right before my board exams inside 5 minutes!', tag: 'CBSE 12th', rank: '98.5%', img: studentPhotos[3] },
+            { name: 'Vikram Joshi', text: 'The faculty is exceptionally good! Alakh Sir’s videos from foundation days set my physics straight for life. Now cracking GATE with an awesome score.', tag: 'GATE', rank: 'AIR 144', img: studentPhotos[4] }
+        ];
+
+        testData.forEach(t => {
+            const card = document.createElement('div');
+            card.className = 'testimonial-card';
+            card.innerHTML = `
+                <i class="fa-solid fa-quote-right quote-icon"></i>
+                <div class="student-info">
+                    <img src="${t.img}" class="student-img" alt="Student avatar">
+                    <div class="student-detail">
+                        <h4>${t.name}</h4>
+                        <div class="student-tag"><i class="fa-solid fa-check-circle"></i> ${t.tag} | ${t.rank}</div>
+                    </div>
+                </div>
+                <p class="quote-text">"${t.text}"</p>
+            `;
+            testimonialsContainer.appendChild(card);
+        });
+
+        // --- 4. MOBILE MENU ---
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            const links = document.querySelector('.nav-links');
+            if(links.style.display === 'flex') {
+                links.style.display = 'none';
+            } else {
+                links.style.display = 'flex';
+                links.style.flexDirection = 'column';
+                links.style.position = 'absolute';
+                links.style.top = '100%';
+                links.style.left = '0';
+                links.style.width = '100%';
+                links.style.background = 'white';
+                links.style.padding = '30px 20px';
+                links.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+                links.style.alignItems = 'flex-start';
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.style.padding = '15px 0';
+                    item.style.width = '100%';
+                    item.style.borderBottom = '1px solid #eee';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
